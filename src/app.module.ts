@@ -7,6 +7,8 @@ import { AppService } from './app.service';
 import { PartidosModule } from './partidos/partidos.module';
 import { CategoriasModule } from './categorias/categorias.module';
 import { EquiposModule } from './equipos/equipos.module';
+import { JugadoresModule } from './jugadores/jugadores.module';
+import { EstadiosModule } from './estadios/estadios.module';
 
 @Module({
   imports: [
@@ -42,6 +44,10 @@ import { EquiposModule } from './equipos/equipos.module';
     CategoriasModule,
 
     EquiposModule,
+
+    JugadoresModule,
+
+    EstadiosModule,
   ],
 
   controllers: [AppController],
