@@ -1,0 +1,18 @@
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MaxLength,
+} from 'class-validator';
+
+export class CreateCategoriaDto {
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(80)
+  nombre!: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  descripcion?: string;
+}
