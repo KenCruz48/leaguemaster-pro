@@ -1,5 +1,7 @@
+import { Trim } from '../../common/transforms/trim-string.transform';
 import {
   IsInt,
+  IsNotEmpty,
   IsOptional,
   IsPositive,
   IsString,
@@ -10,17 +12,23 @@ import {
 
 export class UpdateJugadorDto {
   @IsOptional()
+  @Trim()
   @IsString()
+  @IsNotEmpty()
   @MaxLength(80)
   nombre?: string;
 
   @IsOptional()
+  @Trim()
   @IsString()
+  @IsNotEmpty()
   @MaxLength(80)
   apellido?: string;
 
   @IsOptional()
+  @Trim()
   @IsString()
+  @IsNotEmpty()
   @MaxLength(30)
   numeroDocumento?: string;
 

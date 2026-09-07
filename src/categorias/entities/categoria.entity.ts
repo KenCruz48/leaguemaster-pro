@@ -1,9 +1,4 @@
-import {
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Equipo } from '../../equipos/entities/equipo.entity';
 
@@ -26,9 +21,6 @@ export class Categoria {
   })
   descripcion!: string | null;
 
-  @OneToMany(
-    () => Equipo,
-    (equipo) => equipo.categoria,
-  )
+  @OneToMany(() => Equipo, (equipo) => equipo.categoria)
   equipos!: Equipo[];
 }

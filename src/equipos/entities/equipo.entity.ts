@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  RelationId,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, RelationId } from 'typeorm';
 
 import { Categoria } from '../../categorias/entities/categoria.entity';
 
@@ -21,21 +14,15 @@ export class Equipo {
   })
   nombre!: string;
 
-  @ManyToOne(
-    () => Categoria,
-    (categoria) => categoria.equipos,
-    {
-      nullable: false,
-      onDelete: 'RESTRICT',
-    },
-  )
+  @ManyToOne(() => Categoria, (categoria) => categoria.equipos, {
+    nullable: false,
+    onDelete: 'RESTRICT',
+  })
   @JoinColumn({
     name: 'categoria_id',
   })
   categoria!: Categoria;
 
-  @RelationId(
-    (equipo: Equipo) => equipo.categoria,
-  )
+  @RelationId((equipo: Equipo) => equipo.categoria)
   categoriaId!: number;
 }

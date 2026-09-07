@@ -14,21 +14,17 @@ describe('EquiposController', () => {
   };
 
   beforeEach(async () => {
-    const module: TestingModule =
-      await Test.createTestingModule({
-        controllers: [EquiposController],
-        providers: [
-          {
-            provide: EquiposService,
-            useValue: equiposServiceMock,
-          },
-        ],
-      }).compile();
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [EquiposController],
+      providers: [
+        {
+          provide: EquiposService,
+          useValue: equiposServiceMock,
+        },
+      ],
+    }).compile();
 
-    controller =
-      module.get<EquiposController>(
-        EquiposController,
-      );
+    controller = module.get<EquiposController>(EquiposController);
   });
 
   it('should be defined', () => {

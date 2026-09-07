@@ -13,19 +13,22 @@ export class EstadiosService {
     private readonly estadiosRepository: Repository<Estadio>,
   ) {}
 
-  async crear(dto: CreateEstadioDto) {
-    const estadio = this.estadiosRepository.create(dto);
+  async crear(dto: CreateEstadioDto): Promise<Estadio> {
+    const estadio = this.estadiosRepository.create({
+      ...dto,
+      nombre: dto.nombre.trim(),
+      ubicacion: dto.ubicacion.trim(),
+    });
+
     return this.estadiosRepository.save(estadio);
   }
 
-  async listar() {
-    return this.estadiosRepository.find();
+  async listar(): Promise<Estadio[]> {
+    return this.estadiosRepository.find({ order: { nombre: 'ASC', id: 'ASC' } });
   }
 
-  async buscarPorId(id: number) {
-    const estadio = await this.estadiosRepository.findOne({
-      where: { id },
-    });
+  async buscarPorId(id: number): Promise<Estadio> {
+    const estadio = await this.estadiosRepository.findOne({ where: { id } });
 
     if (!estadio) {
       throw new NotFoundException(`Estadio ${id} no encontrado`);
@@ -34,15 +37,15 @@ export class EstadiosService {
     return estadio;
   }
 
-  async actualizar(id: number, dto: UpdateEstadioDto) {
+  async actualizar(id: number, dto: UpdateEstadioDto): Promise<Estadio> {
     const estadio = await this.buscarPorId(id);
 
     if (dto.nombre !== undefined) {
-      estadio.nombre = dto.nombre;
+      estadio.nombre = dto.nombre.trim();
     }
 
     if (dto.ubicacion !== undefined) {
-      estadio.ubicacion = dto.ubicacion;
+      estadio.ubicacion = dto.ubicacion.trim();
     }
 
     if (dto.capacidad !== undefined) {
@@ -52,13 +55,10 @@ export class EstadiosService {
     return this.estadiosRepository.save(estadio);
   }
 
-  async eliminar(id: number) {
+  async eliminar(id: number): Promise<{ message: string }> {
     const estadio = await this.buscarPorId(id);
-
     await this.estadiosRepository.remove(estadio);
 
-    return {
-      message: `Estadio ${id} eliminado correctamente`,
-    };
+    return { message: `Estadio ${id} eliminado correctamente` };
   }
 }

@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
 
 import { EventosService } from './eventos.service';
 import { CreateEventoDto } from './dto/create-evento.dto';
@@ -15,10 +8,7 @@ export class EventosController {
   constructor(private readonly eventosService: EventosService) {}
 
   @Post()
-  crear(
-    @Param('partidoId', ParseIntPipe) partidoId: number,
-    @Body() dto: CreateEventoDto,
-  ) {
+  crear(@Param('partidoId', ParseIntPipe) partidoId: number, @Body() dto: CreateEventoDto) {
     return this.eventosService.crear(partidoId, dto);
   }
 

@@ -1,94 +1,98 @@
 # LeagueMaster Pro
 
-LeagueMaster Pro es una API REST desarrollada para la gestión de torneos de fútbol. El sistema permite administrar las principales entidades involucradas en una competición deportiva, manteniendo una arquitectura modular y relaciones consistentes entre los datos.
+LeagueMaster Pro es una API REST para la gestión de torneos de fútbol. Está desarrollada con NestJS, TypeScript, TypeORM y MySQL.
 
-El proyecto está desarrollado con NestJS, TypeScript, TypeORM y MySQL.
+## Módulos
 
-## Estado del proyecto
+- Categorías
+- Equipos
+- Jugadores
+- Estadios
+- Partidos
+- Eventos de partido
 
-En desarrollo.
+## Requisitos
 
-El proyecto se encuentra actualmente en fase de integración de módulos y validación de funcionalidades.
-
-## Tecnologías utilizadas
-
-- Node.js
-- NestJS
-- TypeScript
-- TypeORM
+- Node.js 22 recomendado
+- npm
 - MySQL
-- class-validator
-- class-transformer
-- Jest
-- Git
-- GitHub
 
-## Funcionalidades principales
+## Configuración
 
-LeagueMaster Pro está compuesto actualmente por los siguientes módulos:
+1. Instale dependencias:
 
-| Módulo | Descripción |
-|---|---|
-| Categorías | Administración de las categorías disponibles dentro de los torneos |
-| Equipos | Registro y gestión de los equipos participantes |
-| Jugadores | Administración de jugadores y asociación con equipos |
-| Estadios | Registro y gestión de los estadios disponibles |
-| Partidos | Administración de encuentros, fechas y relaciones correspondientes |
+```bash
+npm install
+```
 
-Los módulos implementan operaciones CRUD y validaciones de datos mediante DTO.
+2. Copie `.env.example` a `.env` y configure la conexión a MySQL.
 
-## Arquitectura
+3. Inicie el proyecto:
 
-El proyecto utiliza la arquitectura modular proporcionada por NestJS.
+```bash
+npm run start:dev
+```
 
-Cada módulo mantiene separadas sus principales responsabilidades:
+La API usa el puerto `3000` por defecto.
+
+## Variables de entorno
+
+| Variable | Descripción | Valor por defecto |
+| --- | --- | --- |
+| `NODE_ENV` | Entorno de ejecución | `development` |
+| `PORT` | Puerto HTTP | `3000` |
+| `DB_HOST` | Host de MySQL | `localhost` |
+| `DB_PORT` | Puerto de MySQL | `3306` |
+| `DB_USERNAME` | Usuario de MySQL | obligatorio |
+| `DB_PASSWORD` | Contraseña de MySQL | vacía solo fuera de producción |
+| `DB_DATABASE` | Base de datos | obligatorio |
+| `DB_SYNCHRONIZE` | Sincronización automática de TypeORM | `true` en desarrollo, `false` en producción |
+| `CORS_ORIGINS` | Orígenes permitidos separados por coma | vacío |
+
+## Calidad y pruebas
+
+```bash
+npm run format:check
+npm run lint
+npm test -- --runInBand
+npm run build
+```
+
+También puede ejecutar todo con:
+
+```bash
+npm run check
+```
+
+## Seguridad
+
+- Los DTO rechazan propiedades no permitidas.
+- Las variables de entorno se validan al iniciar.
+- `DB_SYNCHRONIZE` queda desactivado por defecto en producción.
+- CORS solo se habilita cuando se configuran orígenes explícitos.
+- Se eliminan cabeceras HTTP innecesarias y se agregan cabeceras defensivas.
+- Los archivos `.env*` no se versionan, excepto `.env.example`.
+
+## Estructura
 
 ```text
-Controller
-    |
-    v
-Service
-    |
-    v
-Repository
-    |
-    v
-Entity
-    |
-    v
-MySQL
+src/
+  categorias/
+  equipos/
+  estadios/
+  eventos/
+  jugadores/
+  partidos/
+  config/
+  app.controller.ts
+  app.module.ts
+  app.service.ts
+  main.ts
 
-leaguemaster-pro/
-|
-|-- documentos/
-|
-|-- src/
-|   |
-|   |-- categorias/
-|   |-- equipos/
-|   |-- estadios/
-|   |-- jugadores/
-|   |-- partidos/
-|   |
-|   |-- app.controller.ts
-|   |-- app.module.ts
-|   |-- app.service.ts
-|   `-- main.ts
-|
-|-- test/
-|
-|-- package.json
-|-- package-lock.json
-|-- nest-cli.json
-|-- tsconfig.json
-`-- README.md
+docs/
+test/
+```
 
-modulo/
-|
-|-- dto/
-|-- entities/
-|-- modulo.controller.ts
-|-- modulo.controller.spec.ts
-|-- modulo.module.ts
-|-- modulo.service.ts
-`-- modulo.service.spec.ts
+## Integración continua
+
+El workflow `.github/workflows/ci.yml` levanta un MySQL aislado y ejecuta instalación reproducible, formato, lint, pruebas unitarias, pruebas E2E, build y auditoría de dependencias de producción en cada Pull Request hacia `main` o `develop`.

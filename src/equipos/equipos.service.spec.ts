@@ -21,25 +21,21 @@ describe('EquiposService', () => {
   };
 
   beforeEach(async () => {
-    const module: TestingModule =
-      await Test.createTestingModule({
-        providers: [
-          EquiposService,
-          {
-            provide: getRepositoryToken(Equipo),
-            useValue: equiposRepositoryMock,
-          },
-          {
-            provide: getRepositoryToken(Categoria),
-            useValue: categoriasRepositoryMock,
-          },
-        ],
-      }).compile();
-
-    service =
-      module.get<EquiposService>(
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
         EquiposService,
-      );
+        {
+          provide: getRepositoryToken(Equipo),
+          useValue: equiposRepositoryMock,
+        },
+        {
+          provide: getRepositoryToken(Categoria),
+          useValue: categoriasRepositoryMock,
+        },
+      ],
+    }).compile();
+
+    service = module.get<EquiposService>(EquiposService);
   });
 
   it('should be defined', () => {

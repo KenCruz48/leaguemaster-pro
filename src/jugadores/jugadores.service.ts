@@ -1,8 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -16,34 +12,35 @@ export class JugadoresService {
   constructor(
     @InjectRepository(Jugador)
     private readonly jugadoresRepository: Repository<Jugador>,
-
     @InjectRepository(Equipo)
     private readonly equiposRepository: Repository<Equipo>,
   ) {}
 
-  async crear(dto: CreateJugadorDto) {
+  private async buscarEquipo(equipoId: number): Promise<Equipo> {
+    const equipo = await this.equiposRepository.findOne({ where: { id: equipoId } });
+
+    if (!equipo) {
+      throw new NotFoundException(`Equipo ${equipoId} no encontrado`);
+    }
+
+    return equipo;
+  }
+
+  async crear(dto: CreateJugadorDto): Promise<Jugador> {
+    const numeroDocumento = dto.numeroDocumento.trim();
     const jugadorExistente = await this.jugadoresRepository.findOne({
-      where: {
-        numeroDocumento: dto.numeroDocumento,
-      },
+      where: { numeroDocumento },
     });
 
     if (jugadorExistente) {
       throw new ConflictException('El número de documento ya está registrado');
     }
 
-    const equipo = await this.equiposRepository.findOne({
-      where: { id: dto.equipoId },
-    });
-
-    if (!equipo) {
-      throw new NotFoundException(`Equipo ${dto.equipoId} no encontrado`);
-    }
-
+    const equipo = await this.buscarEquipo(dto.equipoId);
     const jugador = this.jugadoresRepository.create({
-      nombre: dto.nombre,
-      apellido: dto.apellido,
-      numeroDocumento: dto.numeroDocumento,
+      nombre: dto.nombre.trim(),
+      apellido: dto.apellido.trim(),
+      numeroDocumento,
       numeroCamiseta: dto.numeroCamiseta,
       equipo,
     });
@@ -51,20 +48,17 @@ export class JugadoresService {
     return this.jugadoresRepository.save(jugador);
   }
 
-  async listar() {
+  async listar(): Promise<Jugador[]> {
     return this.jugadoresRepository.find({
-      relations: {
-        equipo: true,
-      },
+      relations: { equipo: true },
+      order: { apellido: 'ASC', nombre: 'ASC', id: 'ASC' },
     });
   }
 
-  async buscarPorId(id: number) {
+  async buscarPorId(id: number): Promise<Jugador> {
     const jugador = await this.jugadoresRepository.findOne({
       where: { id },
-      relations: {
-        equipo: true,
-      },
+      relations: { equipo: true },
     });
 
     if (!jugador) {
@@ -74,48 +68,35 @@ export class JugadoresService {
     return jugador;
   }
 
-  async actualizar(id: number, dto: UpdateJugadorDto) {
+  async actualizar(id: number, dto: UpdateJugadorDto): Promise<Jugador> {
     const jugador = await this.buscarPorId(id);
 
-    if (
-      dto.numeroDocumento !== undefined &&
-      dto.numeroDocumento !== jugador.numeroDocumento
-    ) {
-      const jugadorExistente = await this.jugadoresRepository.findOne({
-        where: {
-          numeroDocumento: dto.numeroDocumento,
-        },
-      });
+    if (dto.numeroDocumento !== undefined) {
+      const numeroDocumento = dto.numeroDocumento.trim();
 
-      if (jugadorExistente) {
-        throw new ConflictException(
-          'El número de documento ya está registrado',
-        );
+      if (numeroDocumento !== jugador.numeroDocumento) {
+        const jugadorExistente = await this.jugadoresRepository.findOne({
+          where: { numeroDocumento },
+        });
+
+        if (jugadorExistente) {
+          throw new ConflictException('El número de documento ya está registrado');
+        }
       }
+
+      jugador.numeroDocumento = numeroDocumento;
     }
 
     if (dto.equipoId !== undefined) {
-      const equipo = await this.equiposRepository.findOne({
-        where: { id: dto.equipoId },
-      });
-
-      if (!equipo) {
-        throw new NotFoundException(`Equipo ${dto.equipoId} no encontrado`);
-      }
-
-      jugador.equipo = equipo;
+      jugador.equipo = await this.buscarEquipo(dto.equipoId);
     }
 
     if (dto.nombre !== undefined) {
-      jugador.nombre = dto.nombre;
+      jugador.nombre = dto.nombre.trim();
     }
 
     if (dto.apellido !== undefined) {
-      jugador.apellido = dto.apellido;
-    }
-
-    if (dto.numeroDocumento !== undefined) {
-      jugador.numeroDocumento = dto.numeroDocumento;
+      jugador.apellido = dto.apellido.trim();
     }
 
     if (dto.numeroCamiseta !== undefined) {
@@ -125,13 +106,10 @@ export class JugadoresService {
     return this.jugadoresRepository.save(jugador);
   }
 
-  async eliminar(id: number) {
+  async eliminar(id: number): Promise<{ message: string }> {
     const jugador = await this.buscarPorId(id);
-
     await this.jugadoresRepository.remove(jugador);
 
-    return {
-      message: `Jugador ${id} eliminado correctamente`,
-    };
+    return { message: `Jugador ${id} eliminado correctamente` };
   }
 }

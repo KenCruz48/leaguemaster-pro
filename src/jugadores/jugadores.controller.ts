@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  ParseIntPipe,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 
 import { CreateJugadorDto } from './dto/create-jugador.dto';
 import { UpdateJugadorDto } from './dto/update-jugador.dto';
@@ -33,10 +24,7 @@ export class JugadoresController {
   }
 
   @Patch(':id')
-  actualizar(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() dto: UpdateJugadorDto,
-  ) {
+  actualizar(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateJugadorDto) {
     return this.jugadoresService.actualizar(id, dto);
   }
 

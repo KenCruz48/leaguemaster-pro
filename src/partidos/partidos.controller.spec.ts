@@ -17,20 +17,17 @@ describe('PartidosController', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
 
-    const module: TestingModule =
-      await Test.createTestingModule({
-        controllers: [PartidosController],
-        providers: [
-          {
-            provide: PartidosService,
-            useValue: partidosServiceMock,
-          },
-        ],
-      }).compile();
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [PartidosController],
+      providers: [
+        {
+          provide: PartidosService,
+          useValue: partidosServiceMock,
+        },
+      ],
+    }).compile();
 
-    controller = module.get<PartidosController>(
-      PartidosController,
-    );
+    controller = module.get<PartidosController>(PartidosController);
   });
 
   it('should be defined', () => {

@@ -1,0 +1,6 @@
+export enum EstadoPartido {
+  PROGRAMADO = 'PROGRAMADO',
+  EN_CURSO = 'EN_CURSO',
+  FINALIZADO = 'FINALIZADO',
+  CANCELADO = 'CANCELADO',
+}

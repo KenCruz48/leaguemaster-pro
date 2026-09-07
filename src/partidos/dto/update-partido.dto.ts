@@ -1,10 +1,6 @@
-import {
-  IsDateString,
-  IsIn,
-  IsInt,
-  IsOptional,
-  IsPositive,
-} from 'class-validator';
+import { IsDateString, IsEnum, IsInt, IsOptional, IsPositive } from 'class-validator';
+
+import { EstadoPartido } from '../enums/estado-partido.enum';
 
 export class UpdatePartidoDto {
   @IsOptional()
@@ -27,11 +23,6 @@ export class UpdatePartidoDto {
   fecha?: string;
 
   @IsOptional()
-  @IsIn([
-    'PROGRAMADO',
-    'EN_CURSO',
-    'FINALIZADO',
-    'CANCELADO',
-  ])
-  estado?: string;
+  @IsEnum(EstadoPartido)
+  estado?: EstadoPartido;
 }

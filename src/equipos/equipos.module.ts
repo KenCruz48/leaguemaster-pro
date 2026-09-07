@@ -8,24 +8,12 @@ import { EquiposController } from './equipos.controller';
 import { EquiposService } from './equipos.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      Equipo,
-      Categoria,
-    ]),
-  ],
+  imports: [TypeOrmModule.forFeature([Equipo, Categoria])],
 
-  controllers: [
-    EquiposController,
-  ],
+  controllers: [EquiposController],
 
-  providers: [
-    EquiposService,
-  ],
+  providers: [EquiposService],
 
-  exports: [
-    TypeOrmModule,
-    EquiposService,
-  ],
+  exports: [TypeOrmModule, EquiposService],
 })
 export class EquiposModule {}

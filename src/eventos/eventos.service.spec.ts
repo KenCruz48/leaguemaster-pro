@@ -1,9 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import {
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 import { EventosService } from './eventos.service';
 import { EventoPartido } from './entities/evento-partido.entity';
@@ -155,9 +152,7 @@ describe('EventosService', () => {
     partidosRepositoryMock.findOne.mockResolvedValue(partido);
     jugadoresRepositoryMock.findOne.mockResolvedValue(jugador);
 
-    await expect(service.crear(1, dto)).rejects.toBeInstanceOf(
-      BadRequestException,
-    );
+    await expect(service.crear(1, dto)).rejects.toBeInstanceOf(BadRequestException);
 
     expect(eventosRepositoryMock.save).not.toHaveBeenCalled();
   });
@@ -171,9 +166,7 @@ describe('EventosService', () => {
       jugadorId: 1,
     };
 
-    await expect(service.crear(999, dto)).rejects.toBeInstanceOf(
-      NotFoundException,
-    );
+    await expect(service.crear(999, dto)).rejects.toBeInstanceOf(NotFoundException);
   });
 
   it('rechaza si el jugador no existe', async () => {
@@ -192,8 +185,6 @@ describe('EventosService', () => {
       jugadorId: 999,
     };
 
-    await expect(service.crear(1, dto)).rejects.toBeInstanceOf(
-      NotFoundException,
-    );
+    await expect(service.crear(1, dto)).rejects.toBeInstanceOf(NotFoundException);
   });
 });

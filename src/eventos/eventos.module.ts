@@ -9,13 +9,7 @@ import { Partido } from '../partidos/entities/partido.entity';
 import { Jugador } from '../jugadores/entities/jugador.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      EventoPartido,
-      Partido,
-      Jugador,
-    ]),
-  ],
+  imports: [TypeOrmModule.forFeature([EventoPartido, Partido, Jugador])],
   controllers: [EventosController],
   providers: [EventosService],
 })
