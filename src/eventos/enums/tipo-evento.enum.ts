@@ -1,0 +1,5 @@
+export enum TipoEvento {
+  GOL = 'GOL',
+  TARJETA_AMARILLA = 'TARJETA_AMARILLA',
+  TARJETA_ROJA = 'TARJETA_ROJA',
+}
