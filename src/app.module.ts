@@ -9,6 +9,7 @@ import { CategoriasModule } from './categorias/categorias.module';
 import { EquiposModule } from './equipos/equipos.module';
 import { JugadoresModule } from './jugadores/jugadores.module';
 import { EstadiosModule } from './estadios/estadios.module';
+import { EventosModule } from './eventos/eventos.module';
 
 @Module({
   imports: [
@@ -48,6 +49,8 @@ import { EstadiosModule } from './estadios/estadios.module';
     JugadoresModule,
 
     EstadiosModule,
+
+    EventosModule,
   ],
 
   controllers: [AppController],
